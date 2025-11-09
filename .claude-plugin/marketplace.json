@@ -1,0 +1,23 @@
+{
+    "name": "aizimo-plugin",
+    "owner": {
+      "name": "AI Zimo",
+      "email": "2876253980@qq.com"
+    },
+    "metadata": {
+      "description": "Aizimo plugin",
+      "version": "1.0.0"
+    },
+    "plugins": [
+      {
+        "name": "Agent-skills",
+        "description": "Collection of agent skills, Such as LangChain 1.0",
+        "source": "./",
+        "strict": false,
+        "skills": [
+          "./skills/langchain-1.0"
+        ]
+      }
+    ]
+  }
+  
