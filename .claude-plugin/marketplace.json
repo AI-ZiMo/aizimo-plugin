@@ -17,6 +17,16 @@
         "skills": [
           "./skills/langchain-1.0"
         ]
+      },
+      {
+        "name": "apple-development-skills",
+        "description": "Skills for Apple app development and App Store submission",
+        "source": "./",
+        "strict": false,
+        "skills": [
+          "./skills/app-store-submission",
+          "./skills/privacy-policy-generator"
+        ]
       }
     ]
   }
