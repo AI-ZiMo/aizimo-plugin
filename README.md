@@ -4,7 +4,12 @@
 
 This plugin includes the following specialized skills:
 
+### Agent Skills
 - **Agent-skills:langchain-1.0** - LangChain 1.0 development support including building chains, implementing RAG systems, integrating models, creating agents, and troubleshooting LangChain applications.
+
+### Apple Development Skills
+- **apple-development-skills:app-store-submission** - Generate App Store submission materials including promotional text, description, and keywords. Supports bilingual submissions (Chinese/English) and ensures compliance with Apple's character limits and guidelines.
+- **apple-development-skills:privacy-policy-generator** - Generate comprehensive, legally-compliant privacy policies for applications. Supports automated codebase scanning and interactive questionnaires with GDPR/CCPA compliance addendums.
 
 ## Installation
 
