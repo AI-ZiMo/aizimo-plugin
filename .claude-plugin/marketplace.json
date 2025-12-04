@@ -6,18 +6,9 @@
     },
     "metadata": {
       "description": "Aizimo plugin",
-      "version": "1.0.0"
+      "version": "1.1.0"
     },
     "plugins": [
-      {
-        "name": "Agent-skills",
-        "description": "Collection of agent skills, Such as LangChain 1.0",
-        "source": "./",
-        "strict": false,
-        "skills": [
-          "./skills/langchain-1.0"
-        ]
-      },
       {
         "name": "apple-development-skills",
         "description": "Skills for Apple app development and App Store submission",
@@ -26,6 +17,31 @@
         "skills": [
           "./skills/app-store-submission",
           "./skills/privacy-policy-generator"
+        ]
+      },
+      {
+        "name": "convex-skills",
+        "description": "Skills for Convex backend development",
+        "source": "./",
+        "strict": false,
+        "skills": [
+          "./skills/convex-skills/convex-queries",
+          "./skills/convex-skills/convex-mutations",
+          "./skills/convex-skills/convex-actions-general",
+          "./skills/convex-skills/convex-agents-fundamentals",
+          "./skills/convex-skills/convex-agents-messages",
+          "./skills/convex-skills/convex-agents-threads",
+          "./skills/convex-skills/convex-agents-tools",
+          "./skills/convex-skills/convex-agents-context",
+          "./skills/convex-skills/convex-agents-rag",
+          "./skills/convex-skills/convex-agents-workflows",
+          "./skills/convex-skills/convex-agents-rate-limiting",
+          "./skills/convex-skills/convex-agents-streaming",
+          "./skills/convex-skills/convex-agents-files",
+          "./skills/convex-skills/convex-agents-human-agents",
+          "./skills/convex-skills/convex-agents-usage-tracking",
+          "./skills/convex-skills/convex-agents-debugging",
+          "./skills/convex-skills/convex-agents-playground"
         ]
       }
     ]
