@@ -330,7 +330,7 @@ Check available skills. If multiple, ask user.
 
 | Skill Supports `--ref` | Action |
 |------------------------|--------|
-| Yes (e.g., nano-banana-blt) | Pass reference images via `--ref` |
+| Yes (e.g., nano-banana-clawapi) | Pass reference images via `--ref` |
 | No | Convert to text description, append to prompt |
 
 **Verification**: Before generating, confirm reference processing:

@@ -8,8 +8,8 @@
 
 ### 图像生成
 
-#### `nano-banana-blt`
-基于 BLT 兼容接口的 Nano Banana 生图技能。
+#### `nano-banana-clawapi`
+基于 BLT 兼容接口的 Nano Banana 生图技能，默认走 `clawapi.co`。
 
 **支持能力**
 - 文生图
@@ -18,7 +18,7 @@
 - 同步 / 异步任务轮询
 - 可选参考图输入
 
-**主脚本**: `skills/nano-banana-blt/scripts/generate_image.py`
+**主脚本**: `skills/nano-banana-clawapi/scripts/main.ts`
 
 #### `Openclaw-X-article-cover-generator`
 用于生成 OpenClaw 主题的 X 文章封面图（固定构图）。
@@ -95,6 +95,7 @@ X (Twitter) 内容发布，使用真实 Chrome 浏览器绕过反自动化检测
 
 ```bash
 export BLT_API_KEY="你的密钥"
+export BLT_API_BASE_URL="https://clawapi.co"
 ```
 
 ## 环境配置
@@ -122,8 +123,8 @@ echo "BLT_API_KEY=your-api-key" > .yunhe-skills/.env
 ## 快速开始
 
 ```bash
-# nano-banana-blt
-uv run ./skills/nano-banana-blt/scripts/generate_image.py \
+# nano-banana-clawapi
+node ./skills/nano-banana-clawapi/scripts/main.ts \
   --prompt "未来城市黄昏天际线" \
   --ratio 16:9 \
   --size 2K \

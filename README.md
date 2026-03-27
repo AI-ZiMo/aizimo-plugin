@@ -8,8 +8,8 @@ This repository currently focuses on image-generation workflows and X (Twitter) 
 
 ## Included Skills
 
-### 1) `nano-banana-blt`
-Generate images with the BLT-compatible Nano Banana endpoint.
+### 1) `nano-banana-clawapi`
+Generate images with the BLT-compatible Nano Banana endpoint, now defaulting to `clawapi.co`.
 
 **What it supports**
 - Text-to-image
@@ -19,7 +19,7 @@ Generate images with the BLT-compatible Nano Banana endpoint.
 - Optional reference images
 
 **Main script**
-- `skills/nano-banana-blt/scripts/generate_image.py`
+- `skills/nano-banana-clawapi/scripts/main.ts`
 
 ### 2) `Openclaw-X-article-cover-generator`
 Generate OpenClaw-themed X article cover images with a fixed composition.
@@ -41,13 +41,14 @@ Generate OpenClaw-themed X article cover images with a fixed composition.
 
 ```bash
 export BLT_API_KEY="your-key"
+export BLT_API_BASE_URL="https://clawapi.co"
 ```
 
 ## Quick Start
 
 ```bash
-# nano-banana-blt
-uv run ./skills/nano-banana-blt/scripts/generate_image.py \
+# nano-banana-clawapi
+node ./skills/nano-banana-clawapi/scripts/main.ts \
   --prompt "A futuristic city skyline at sunset" \
   --ratio 16:9 \
   --size 2K \
