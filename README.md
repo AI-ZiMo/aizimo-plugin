@@ -20,6 +20,16 @@ Generate and edit GPT-Image-2 images through `https://sub2api26.zeabur.app/`.
 **Main script**
 - `skills/gpt-image-sub2api/scripts/generate.js`
 
+**First-time setup**
+
+```bash
+mkdir -p ~/.sub2api
+echo '{"api_key":"PASTE_YOUR_KEY_HERE","base_url":"https://sub2api26.zeabur.app/"}' > ~/.sub2api/config.json
+chmod 600 ~/.sub2api/config.json
+```
+
+If the config is missing or invalid, the script prints the setup URL and the correct command for macOS/Linux or Windows. Once configured, later generations run directly.
+
 ### 2) `nano-banana-clawapi`
 Generate images with the BLT-compatible Nano Banana endpoint, now defaulting to `clawapi.co`.
 
@@ -48,11 +58,12 @@ Generate OpenClaw-themed X article cover images with a fixed composition.
 ## Requirements
 
 - Python 3.10+
+- Node.js 18+
 - `uv` (recommended runner)
-- Valid API keys in environment variables
+- Provider credentials configured as described by each skill
 
 ```bash
-export SUB2API_API_KEY="your-sub2api-key"
+# nano-banana-clawapi only
 export BLT_API_KEY="your-key"
 export BLT_API_BASE_URL="https://clawapi.co"
 ```

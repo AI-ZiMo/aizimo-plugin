@@ -10,19 +10,23 @@ description: 使用 Sub2API 的 GPT-Image-2 接口生成或编辑图片，支持
 ## 前置检查
 
 1. 运行 `node -v`，确认 Node.js 18 或更高版本可用。
-2. 检查 API Key。读取优先级：
-   1. 命令行 `--api-key`
-   2. 环境变量 `SUB2API_API_KEY`
-   3. 项目配置 `<cwd>/.yunhe-skills/.env`
-   4. 用户配置 `~/.yunhe-skills/.env`
-3. 不要把 Key 写入仓库。若未配置，引导用户写入用户级配置：
+2. 检查 `~/.sub2api/config.json` 是否存在，并确认 `api_key` 非空且不是示例值。
+3. 若未配置，引导用户访问 `https://sub2api26.zeabur.app/` 登录并创建 API Key，然后执行：
 
 ```bash
-mkdir -p ~/.yunhe-skills
-echo 'SUB2API_API_KEY=your-key' >> ~/.yunhe-skills/.env
+mkdir -p ~/.sub2api
+echo '{"api_key":"PASTE_YOUR_KEY_HERE","base_url":"https://sub2api26.zeabur.app/"}' > ~/.sub2api/config.json
+chmod 600 ~/.sub2api/config.json
 ```
 
-可用 `SUB2API_BASE_URL` 覆盖默认 Base URL。传入域名根地址时，脚本自动补全 `/v1`。
+Windows PowerShell：
+
+```powershell
+New-Item -ItemType Directory -Force "$env:USERPROFILE\.sub2api" | Out-Null
+'{"api_key":"PASTE_YOUR_KEY_HERE","base_url":"https://sub2api26.zeabur.app/"}' | Set-Content "$env:USERPROFILE\.sub2api\config.json"
+```
+
+脚本也会自行执行相同检查。若缺少配置、JSON 无效或 Key 仍是示例值，会直接显示注册网址、对应系统的配置命令和配置文件位置。配置一次后，后续调用直接生成。
 
 ## 生成流程
 
@@ -66,8 +70,6 @@ node "$SKILL_DIR/scripts/generate.js" \
 | `--model` | `gpt-image-2` | 图片模型 |
 | `--quality` | `high` | `low`、`medium`、`high`、`auto` |
 | `--format` | `png` | `png`、`jpeg`、`webp` |
-| `--api-key` | 无 | 临时覆盖 API Key；不要写入日志或仓库 |
-| `--base-url` | 默认服务 | 临时覆盖 Base URL |
 
 ## 参数选择
 
@@ -91,5 +93,6 @@ node "$SKILL_DIR/scripts/generate.js" \
 
 ## 安全
 
-- 不打印、不提交、不持久化用户临时提供的 Key。
+- Key 只保存在用户目录的 `~/.sub2api/config.json`，不要写入项目或提交到 Git。
+- macOS/Linux 上将配置文件权限设为 `600`。
 - 测试输出放在仓库外或明确的输出目录，避免把生成图片误提交到 Git。

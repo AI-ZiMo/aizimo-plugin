@@ -7,6 +7,7 @@ const os = require("node:os");
 const DEFAULT_BASE_URL = "https://sub2api26.zeabur.app/";
 const DEFAULT_MODEL = "gpt-image-2";
 const DEFAULT_TIMEOUT_MS = 6 * 60 * 1000;
+const CONFIG_PATH = path.join(os.homedir(), ".sub2api", "config.json");
 
 const RATIOS = new Set([
   "auto", "1:1", "3:2", "2:3", "4:3", "3:4", "5:4", "4:5",
@@ -31,13 +32,11 @@ Options:
   --model <name>          Model (default: gpt-image-2)
   --quality <value>       low | medium | high | auto (default: high)
   --format <value>        png | jpeg | webp (default: png)
-  --api-key <key>         Temporary API key override
-  --base-url <url>        Base URL override
   --help                  Show this help
 
-Environment:
-  SUB2API_API_KEY         API key
-  SUB2API_BASE_URL        Base URL (default: https://sub2api26.zeabur.app/)`);
+Config:
+  ${CONFIG_PATH}
+  {"api_key":"YOUR_KEY","base_url":"https://sub2api26.zeabur.app/"}`);
 }
 
 function parseArgs(argv) {
@@ -50,14 +49,12 @@ function parseArgs(argv) {
     model: DEFAULT_MODEL,
     quality: "high",
     format: "png",
-    apiKey: "",
-    baseUrl: "",
     help: false,
   };
   const valueOptions = new Map([
     ["--prompt", "prompt"], ["--size", "size"], ["--resolution", "resolution"],
     ["--output", "output"], ["--model", "model"], ["--quality", "quality"],
-    ["--format", "format"], ["--api-key", "apiKey"], ["--base-url", "baseUrl"],
+    ["--format", "format"],
   ]);
 
   for (let i = 0; i < argv.length; i += 1) {
@@ -81,30 +78,55 @@ function parseArgs(argv) {
   return args;
 }
 
-function parseEnvFile(filePath) {
-  if (!fs.existsSync(filePath)) return {};
-  const result = {};
-  for (const rawLine of fs.readFileSync(filePath, "utf8").split(/\r?\n/)) {
-    const line = rawLine.trim();
-    if (!line || line.startsWith("#")) continue;
-    const index = line.indexOf("=");
-    if (index < 1) continue;
-    const key = line.slice(0, index).trim();
-    let value = line.slice(index + 1).trim();
-    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
-      value = value.slice(1, -1);
-    }
-    result[key] = value;
+class SetupRequiredError extends Error {
+  constructor() {
+    super("Sub2API setup required");
+    this.name = "SetupRequiredError";
   }
-  return result;
 }
 
-function loadConfig(args) {
-  const project = parseEnvFile(path.join(process.cwd(), ".yunhe-skills", ".env"));
-  const user = parseEnvFile(path.join(os.homedir(), ".yunhe-skills", ".env"));
-  const apiKey = args.apiKey || process.env.SUB2API_API_KEY || project.SUB2API_API_KEY || user.SUB2API_API_KEY;
-  const baseUrl = args.baseUrl || process.env.SUB2API_BASE_URL || project.SUB2API_BASE_URL || user.SUB2API_BASE_URL || DEFAULT_BASE_URL;
-  return { apiKey: apiKey?.trim(), baseUrl: normalizeBaseUrl(baseUrl) };
+function printSetupGuide(reason) {
+  console.error(`Sub2API 首次使用配置${reason ? `（${reason}）` : ""}`);
+  console.error("");
+  console.error("1. 打开 https://sub2api26.zeabur.app/，登录后创建 API Key。");
+  console.error("2. 运行下面一条命令保存 Key：");
+  console.error("");
+  if (process.platform === "win32") {
+    console.error("Windows PowerShell:");
+    console.error(`  New-Item -ItemType Directory -Force \"$env:USERPROFILE\\.sub2api\" | Out-Null; '{\"api_key\":\"PASTE_YOUR_KEY_HERE\",\"base_url\":\"${DEFAULT_BASE_URL}\"}' | Set-Content \"$env:USERPROFILE\\.sub2api\\config.json\"`);
+  } else {
+    console.error("macOS / Linux:");
+    console.error(`  mkdir -p ~/.sub2api && echo '{\"api_key\":\"PASTE_YOUR_KEY_HERE\",\"base_url\":\"${DEFAULT_BASE_URL}\"}' > ~/.sub2api/config.json && chmod 600 ~/.sub2api/config.json`);
+  }
+  console.error("");
+  console.error(`配置文件：${CONFIG_PATH}`);
+  console.error("配置完成后，重新运行刚才的生图命令即可。");
+}
+
+function loadConfig() {
+  if (!fs.existsSync(CONFIG_PATH)) {
+    printSetupGuide("未找到配置文件");
+    throw new SetupRequiredError();
+  }
+
+  let config;
+  try {
+    config = JSON.parse(fs.readFileSync(CONFIG_PATH, "utf8"));
+  } catch {
+    printSetupGuide("配置文件不是有效的 JSON");
+    throw new SetupRequiredError();
+  }
+
+  const apiKey = typeof config.api_key === "string" ? config.api_key.trim() : "";
+  if (!apiKey || ["YOUR_KEY", "PASTE_YOUR_KEY_HERE", "your-key"].includes(apiKey)) {
+    printSetupGuide("api_key 为空或仍是示例值");
+    throw new SetupRequiredError();
+  }
+
+  const baseUrl = typeof config.base_url === "string" && config.base_url.trim()
+    ? config.base_url
+    : DEFAULT_BASE_URL;
+  return { apiKey, baseUrl: normalizeBaseUrl(baseUrl) };
 }
 
 function normalizeBaseUrl(value) {
@@ -221,8 +243,7 @@ async function main() {
     return;
   }
   validateArgs(args);
-  const { apiKey, baseUrl } = loadConfig(args);
-  if (!apiKey) throw new Error("No API key. Set SUB2API_API_KEY, use --api-key, or configure .yunhe-skills/.env");
+  const { apiKey, baseUrl } = loadConfig();
 
   const pixelSize = dimensionsFor(args.size, args.resolution);
   const references = args.imageUrls.map(normalizeImageSource);
@@ -248,10 +269,11 @@ async function main() {
 
 if (require.main === module) {
   main().catch((error) => {
+    if (error instanceof SetupRequiredError) process.exit(1);
     const message = error?.name === "TimeoutError" ? "Request timed out after 6 minutes" : error.message;
     console.error(`Error: ${message}`);
     process.exit(1);
   });
 }
 
-module.exports = { dimensionsFor, normalizeBaseUrl, parseArgs, validateArgs };
+module.exports = { dimensionsFor, loadConfig, normalizeBaseUrl, parseArgs, validateArgs };

@@ -19,6 +19,16 @@
 
 **主脚本**: `skills/gpt-image-sub2api/scripts/generate.js`
 
+**首次配置**
+
+```bash
+mkdir -p ~/.sub2api
+echo '{"api_key":"PASTE_YOUR_KEY_HERE","base_url":"https://sub2api26.zeabur.app/"}' > ~/.sub2api/config.json
+chmod 600 ~/.sub2api/config.json
+```
+
+若配置缺失或无效，脚本会自动显示注册网址，以及适用于 macOS/Linux 或 Windows 的配置命令。配置一次后，后续可以直接生图。
+
 #### `nano-banana-clawapi`
 基于 BLT 兼容接口的 Nano Banana 生图技能，默认走 `clawapi.co`。
 
@@ -101,16 +111,17 @@ X (Twitter) 内容发布，使用真实 Chrome 浏览器绕过反自动化检测
 ## 环境要求
 
 - Python 3.10+
+- Node.js 18+
 - `uv`（推荐）
-- 环境变量里配置有效 API Key
+- 按各 skill 的说明配置对应凭证
 
 ```bash
-export SUB2API_API_KEY="你的-sub2api-密钥"
+# 仅用于 nano-banana-clawapi
 export BLT_API_KEY="你的密钥"
 export BLT_API_BASE_URL="https://clawapi.co"
 ```
 
-## 环境配置
+## nano-banana-clawapi 环境配置
 
 支持通过 `.env` 文件配置 API key，无需每次设置环境变量：
 
