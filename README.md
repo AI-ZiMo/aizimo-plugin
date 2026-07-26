@@ -8,7 +8,19 @@ This repository currently focuses on image-generation workflows and X (Twitter) 
 
 ## Included Skills
 
-### 1) `nano-banana-clawapi`
+### 1) `gpt-image-sub2api`
+Generate and edit GPT-Image-2 images through `https://sub2api26.zeabur.app/`.
+
+**What it supports**
+- Text-to-image and image editing
+- URL, data URI, and local reference images
+- Common aspect ratios and `1k` / `2k` / `4k` resolution presets
+- Local PNG, JPEG, or WebP output
+
+**Main script**
+- `skills/gpt-image-sub2api/scripts/generate.js`
+
+### 2) `nano-banana-clawapi`
 Generate images with the BLT-compatible Nano Banana endpoint, now defaulting to `clawapi.co`.
 
 **What it supports**
@@ -21,7 +33,7 @@ Generate images with the BLT-compatible Nano Banana endpoint, now defaulting to 
 **Main script**
 - `skills/nano-banana-clawapi/scripts/main.ts`
 
-### 2) `Openclaw-X-article-cover-generator`
+### 3) `Openclaw-X-article-cover-generator`
 Generate OpenClaw-themed X article cover images with a fixed composition.
 
 **Composition rules**
@@ -40,11 +52,21 @@ Generate OpenClaw-themed X article cover images with a fixed composition.
 - Valid API keys in environment variables
 
 ```bash
+export SUB2API_API_KEY="your-sub2api-key"
 export BLT_API_KEY="your-key"
 export BLT_API_BASE_URL="https://clawapi.co"
 ```
 
 ## Quick Start
+
+```bash
+# gpt-image-sub2api
+node ./skills/gpt-image-sub2api/scripts/generate.js \
+  --prompt "A cinematic robot walking through Shanghai in the rain" \
+  --size 16:9 \
+  --resolution 2k \
+  --output gpt-image.png
+```
 
 ```bash
 # nano-banana-clawapi

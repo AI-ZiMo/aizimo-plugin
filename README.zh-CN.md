@@ -8,6 +8,17 @@
 
 ### 图像生成
 
+#### `gpt-image-sub2api`
+通过 `https://sub2api26.zeabur.app/` 使用 GPT-Image-2 生成和编辑图片。
+
+**支持能力**
+- 文生图和参考图编辑
+- URL、data URI 和本地参考图
+- 常用宽高比与 `1k` / `2k` / `4k` 分辨率
+- 保存为本地 PNG、JPEG 或 WebP
+
+**主脚本**: `skills/gpt-image-sub2api/scripts/generate.js`
+
 #### `nano-banana-clawapi`
 基于 BLT 兼容接口的 Nano Banana 生图技能，默认走 `clawapi.co`。
 
@@ -94,6 +105,7 @@ X (Twitter) 内容发布，使用真实 Chrome 浏览器绕过反自动化检测
 - 环境变量里配置有效 API Key
 
 ```bash
+export SUB2API_API_KEY="你的-sub2api-密钥"
 export BLT_API_KEY="你的密钥"
 export BLT_API_BASE_URL="https://clawapi.co"
 ```
@@ -121,6 +133,15 @@ echo "BLT_API_KEY=your-api-key" > .yunhe-skills/.env
 ```
 
 ## 快速开始
+
+```bash
+# gpt-image-sub2api
+node ./skills/gpt-image-sub2api/scripts/generate.js \
+  --prompt "雨夜上海街头行走的电影感机器人" \
+  --size 16:9 \
+  --resolution 2k \
+  --output gpt-image.png
+```
 
 ```bash
 # nano-banana-clawapi
